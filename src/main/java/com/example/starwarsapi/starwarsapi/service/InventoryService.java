@@ -1,10 +1,12 @@
 package com.example.starwarsapi.starwarsapi.service;
 
 import com.example.starwarsapi.starwarsapi.model.Inventory;
+import org.springframework.stereotype.Service;
 
 import java.util.Random;
 import java.util.UUID;
 
+@Service
 public class InventoryService {
     Random random = new Random();
 

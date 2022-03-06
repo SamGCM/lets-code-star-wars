@@ -13,17 +13,19 @@ public class Location {
     private String galaxy;
 
     public Location (String galaxy) {
+        this.lat = generateCoordinates();
+        this.lon = generateCoordinates();
         this.galaxy = galaxy;
     }
 
     public String reportCoordinates(){
-        String latitude = generateCoordinates();
-        String longitude = generateCoordinates();
+        int latitude = generateCoordinates();
+        int longitude = generateCoordinates();
 
         return "Estou na " + this.galaxy + ", coordenadas " + latitude + ", " + longitude;
     }
 
-    private String generateCoordinates(){
+    private Integer generateCoordinates(){
         Random gerador = new Random();
         int coordinates = 0;
 
@@ -32,6 +34,6 @@ public class Location {
             coordinates = gerador.nextInt();
         }
 
-        return Integer.toString(coordinates);
+        return coordinates;
     }
 }
