@@ -27,7 +27,8 @@ public class RebelService {
                 requestRebel.getAge(),
                 requestRebel.getGenre(),
                 location,
-                inventory
+                inventory,
+                0
         );
 
         StarwarsapiApplication.listRebels.addRebel(rebel);
@@ -43,6 +44,14 @@ public class RebelService {
         String galaxy = rebel.getLocation().getGalaxy();
         rebel.setLocation(new Location(galaxy));
         return rebel.getLocation();
+    }
+
+    public Rebel reportRebel(UUID id) throws Exception {
+        Rebel rebel = StarwarsapiApplication.listRebels.detailsRebel(id);
+        int actualCount = rebel.getReportCount();
+        rebel.setReportCount(actualCount + 1);
+
+        return rebel;
     }
 
 }

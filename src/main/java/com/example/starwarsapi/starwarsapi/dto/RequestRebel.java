@@ -14,8 +14,7 @@ public class RequestRebel {
     @Length(min = 2)
     String name;
 
-//    @NotNull(message = "O campo 'age' não pode ser null.")
-//    @NotEmpty(message = "O campo 'age' não pode estar vazio")
+
     int age;
 
     @NotNull(message = "O campo 'genre' não pode ser null.")

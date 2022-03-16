@@ -3,14 +3,20 @@ package com.example.starwarsapi.starwarsapi.controller;
 import com.example.starwarsapi.starwarsapi.dto.RequestRebel;
 import com.example.starwarsapi.starwarsapi.dto.ResponseLocation;
 import com.example.starwarsapi.starwarsapi.dto.ResponseRebel;
+import com.example.starwarsapi.starwarsapi.dto.ResponseReportRebel;
 import com.example.starwarsapi.starwarsapi.model.Rebel;
+import com.example.starwarsapi.starwarsapi.service.DataService;
 import com.example.starwarsapi.starwarsapi.service.RebelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileInputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -42,4 +48,14 @@ public class RebelController {
         return ResponseEntity.ok(new ResponseLocation(rebelService.reportLocation(id)));
     }
 
+    @PostMapping("reportar/{id}")
+    public ResponseEntity<ResponseReportRebel> reportRebel(@PathVariable UUID id) throws Exception {
+        return ResponseEntity.ok(new ResponseReportRebel(rebelService.reportRebel(id)));
+    }
+
+    @GetMapping("relatorio")
+    public ResponseEntity<Object> generateFile() throws Exception {
+        DataService dataService = new DataService();
+        return dataService.generateFile();
+    }
 }
