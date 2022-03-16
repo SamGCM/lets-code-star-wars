@@ -21,6 +21,7 @@ public class ResponseRebel {
     private String genre;
     private Location location;
     private Inventory inventory;
+    private List<UUID> voteForTraitor;
 
     public ResponseRebel (Rebel rebel) {
         this.id = rebel.getId();
@@ -29,6 +30,7 @@ public class ResponseRebel {
         this.genre = rebel.getGenre();
         this.location = rebel.getLocation();
         this.inventory = rebel.getInventory();
+        this.voteForTraitor = rebel.getVoteForTraitor();
     }
 
 

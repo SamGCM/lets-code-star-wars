@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -40,6 +41,12 @@ public class RebelController {
     @GetMapping("{id}/localizacao")
     public ResponseEntity<ResponseLocation> rebelLocation(@PathVariable UUID id) throws Exception {
         return ResponseEntity.ok(new ResponseLocation(rebelService.reportLocation(id)));
+    }
+
+    @PatchMapping("/reportar-traidor/{id}")
+    public ResponseEntity<ResponseRebel> reportTraitor(@PathVariable UUID id, @RequestBody Map<String,String> whoReportId) throws Exception {
+        UUID whoReportUUID = UUID.fromString(whoReportId.get("whoReportId"));
+        return ResponseEntity.ok( new ResponseRebel(rebelService.voteTraitor(id, whoReportUUID)));
     }
 
 }
