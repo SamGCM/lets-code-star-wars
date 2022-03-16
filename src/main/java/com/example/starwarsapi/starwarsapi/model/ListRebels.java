@@ -1,5 +1,7 @@
 package com.example.starwarsapi.starwarsapi.model;
 
+import com.example.starwarsapi.starwarsapi.dto.RequestRebel;
+
 import java.util.*;
 
 public class ListRebels {
@@ -23,13 +25,11 @@ public class ListRebels {
         }
     }
 
-//    public Rebel atualizaCliente(UUID id, RequestCliente requestCliente) throws Exception {
-//        ListRebels.rebels.stream().filter(cliente -> Objects.equals(cliente.getId(),id))
-//                .forEach(cliente -> {
-//                    cliente.setNome(requestCliente.getNome());
-//                    cliente.setEmail(requestCliente.getEmail());
-//                    cliente.setSenha(requestCliente.getSenha());
+//    public Rebel updateRebel(UUID id, RequestRebel requestRebel) throws Exception {
+//        ListRebels.rebels.stream().filter(rebel -> Objects.equals(rebel.getId(),id))
+//                .forEach(rebel -> {
+//                    rebel.setInventory(requestRebel.);
 //                });
-//        return detalhesCliente(id);
+//        return detailsRebel(id);
 //    }
 }

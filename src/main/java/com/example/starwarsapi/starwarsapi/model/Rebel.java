@@ -14,4 +14,5 @@ public class Rebel {
     private String genre;
     private Location location;
     private Inventory inventory;
+    private int reportCount;
 }
