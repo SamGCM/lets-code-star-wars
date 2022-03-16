@@ -1,1 +1,1 @@
-# Link para team no postman: https://app.getpostman.com/join-team?invite_code=fdfba3ea30b2cc81f4441a409364cd4c
+# Documentação: https://documenter.getpostman.com/view/19890147/UVsMtk6D
