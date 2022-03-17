@@ -9,19 +9,17 @@ import java.util.UUID;
 
 @Getter @Setter
 public class RequestTrade {
-    private UUID tradeId;
-    private UUID fromId;
-    private UUID toId;
-    private Inventory inventory;
-    private int total;
+    private UUID rebelTrader1;
+    private UUID rebelTrader2;
+    private Inventory itemForTradeRebel1;
+    private Inventory itemForTradeRebel2;
 
     Random random = new Random();
 
-    public RequestTrade (UUID toId, UUID fromId, Inventory inventory) {
-        this.tradeId = UUID.randomUUID();
-        this.fromId = fromId;
-        this.toId = toId;
-        this.inventory = inventory;
-        this.total = Inventory.getTotal(inventory);
+    public RequestTrade (UUID traderId1, UUID traderId2, Inventory traderItens1, Inventory traderItens2) {
+        this.rebelTrader1 = traderId1;
+        this.rebelTrader2 = traderId2;
+        this.itemForTradeRebel1 = traderItens1;
+        this.itemForTradeRebel2 = traderItens2;
     }
 }

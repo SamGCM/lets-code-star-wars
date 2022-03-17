@@ -13,18 +13,16 @@ import java.util.stream.Collectors;
 
 @Getter @Setter @AllArgsConstructor
 public class ResponseTrade {
-    private UUID tradeId;
-    private UUID fromId;
-    private UUID toId;
-    private Inventory inventory;
-    private int total;
+    private UUID rebelTrader1;
+    private UUID rebelTrader2;
+    private Inventory itemForTradeRebel1;
+    private Inventory itemForTradeRebel2;
 
     public ResponseTrade(RequestTrade trade) {
-        this.tradeId = trade.getTradeId();
-        this.fromId = trade.getFromId();
-        this.toId = trade.getToId();
-        this.inventory = trade.getInventory();
-        this.total = trade.getTotal();
+        this.rebelTrader1 = trade.getRebelTrader1();
+        this.rebelTrader2 = trade.getRebelTrader2();
+        this.itemForTradeRebel1 = trade.getItemForTradeRebel1();
+        this.itemForTradeRebel2 = trade.getItemForTradeRebel2();
     }
 
     public static List<ResponseTrade> toResponse(List<RequestTrade> trade){

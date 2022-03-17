@@ -24,14 +24,13 @@ public class InventoryService {
         return inventory;
     }
 
-    public RequestTrade tradeItems (RequestTrade requestTrade) throws Exception {
-        Rebel rebelReceiving =  StarwarsapiApplication.listRebels.detailsRebel(requestTrade.getToId());
-        Rebel rebelSending = StarwarsapiApplication.listRebels.detailsRebel(requestTrade.getFromId());
-        Inventory requestInventory = requestTrade.getInventory();
-        Inventory targetInventory = rebelReceiving.getInventory();
-        Inventory fromInventory = rebelSending.getInventory();
+    public String tradeItems(RequestTrade requestTrade) throws Exception {
+        Rebel Trader1 =  StarwarsapiApplication.listRebels.detailsRebel(requestTrade.getRebelTrader1());
+        Rebel Trader2 = StarwarsapiApplication.listRebels.detailsRebel(requestTrade.getRebelTrader2());
+        Inventory itensForTrade1 = requestTrade.getItemForTradeRebel1();
+        Inventory itensForTrade2 = requestTrade.getItemForTradeRebel2();
 
-        if(verifyIsTraitor(rebelReceiving, rebelSending)) {
+        if(verifyIsTraitor(Trader1, Trader2)) {
             try {
                 throw new Exception("Um dos rebeldes é um traidor! Não pode negociar.");
             } catch (Exception e) {
@@ -39,58 +38,70 @@ public class InventoryService {
             }
         }
 
-        if(verifyBalance(requestInventory, targetInventory)){
-            rebelSending.setInventory(removeItemsFromInventory(fromInventory, requestInventory));
-            rebelReceiving.setInventory(includeItemsNewInventory(requestInventory, targetInventory));
+        if(verifyBalance(itensForTrade1, itensForTrade2) && verifyHaveAllItems(Trader1, itensForTrade1) && verifyHaveAllItems(Trader2, itensForTrade2)){
+
+            Trader1.setInventory(removeItemsFromInventory(Trader1.getInventory(), itensForTrade1));
+            Trader2.setInventory(removeItemsFromInventory(Trader2.getInventory(), itensForTrade2));
+
+            Trader1.setInventory(includeItemsNewInventory(Trader1.getInventory(), itensForTrade2));
+            Trader2.setInventory(includeItemsNewInventory(Trader2.getInventory(), itensForTrade1));
+
         } else {
             try {
                 throw new Exception("Um dos rebeldes não tem itens suficientes para negociar.");
+
             } catch (Exception e) {
                 e.printStackTrace();
+                return "Um dos rebeldes não tem itens suficientes para negociar.";
             }
         }
-        return requestTrade;
+        return "Troca realizada com sucesso";
     }
 
-    private boolean verifyIsTraitor(Rebel rebelReceiving, Rebel rebelSending ){
-        if(rebelReceiving.getReportCount() >= 3){
+    private boolean verifyIsTraitor(Rebel trader1, Rebel trader2 ){
+        if(trader1.getReportCount() >= 3){
             return true;
         }
-        else if(rebelSending.getReportCount() >= 3){
+        else if(trader2.getReportCount() >= 3){
             return true;
         } else {
             return false;
         }
     }
 
-    private boolean verifyBalance(Inventory match, Inventory target){
-        int inventoryMatch = Inventory.getTotal(match);
-        int inventoryTarget = Inventory.getTotal(target);
+    private boolean verifyBalance(Inventory itemsForTrade1, Inventory itemsForTrade2){
+        int totalPointsTrader1 = Inventory.getTotal(itemsForTrade1);
+        int totalPointsTrader2 = Inventory.getTotal(itemsForTrade2);
 
-        return inventoryMatch <= inventoryTarget;
+        return totalPointsTrader1 == totalPointsTrader2;
     }
 
-    private Inventory includeItemsNewInventory(Inventory match, Inventory target){
-        Inventory inventory = new Inventory(
-                target.getId(),
-                match.getWeapon() + target.getWeapon(),
-                match.getAmmo() + target.getAmmo(),
-                match.getWater() + target.getWater(),
-                match.getFood() + target.getFood()
-        );
-
-        return inventory;
+    private boolean verifyHaveAllItems(Rebel trader, Inventory itemsForTrade){
+        return trader.getInventory().getAmmo() >= itemsForTrade.getAmmo() &&
+                trader.getInventory().getFood() >= itemsForTrade.getFood() &&
+                trader.getInventory().getWeapon() >= itemsForTrade.getWeapon() &&
+                trader.getInventory().getWater() >= itemsForTrade.getWater();
     }
 
-    private Inventory removeItemsFromInventory(Inventory inventory, Inventory requestInventory) {
-        Inventory inventoryForReturn = new Inventory(
-                inventory.getId(),
-                inventory.getWeapon() - requestInventory.getWeapon(),
-                inventory.getAmmo() - requestInventory.getAmmo(),
-                inventory.getWater() - requestInventory.getWater(),
-                inventory.getFood() - requestInventory.getFood()
-        );
+    private Inventory includeItemsNewInventory(Inventory traderInventory, Inventory exchangedItems){
 
-        return inventoryForReturn;
+        return new Inventory(
+                traderInventory.getId(),
+                traderInventory.getWeapon() + exchangedItems.getWeapon(),
+                traderInventory.getAmmo() + exchangedItems.getAmmo(),
+                traderInventory.getWater() + exchangedItems.getWater(),
+                traderInventory.getFood() + exchangedItems.getFood()
+        );
+    }
+
+    private Inventory removeItemsFromInventory(Inventory traderInventory, Inventory itemsForExchange) {
+
+        return new Inventory(
+                traderInventory.getId(),
+                traderInventory.getWeapon() - itemsForExchange.getWeapon(),
+                traderInventory.getAmmo() - itemsForExchange.getAmmo(),
+                traderInventory.getWater() - itemsForExchange.getWater(),
+                traderInventory.getFood() - itemsForExchange.getFood()
+        );
     }
 }
