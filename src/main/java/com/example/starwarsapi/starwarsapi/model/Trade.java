@@ -9,9 +9,8 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 public class Trade {
-    private UUID tradeId;
-    private UUID fromId;
-    private UUID toId;
-    private Inventory inventory;
-    private int total;
+    private UUID rebelTrader1;
+    private UUID rebelTrader2;
+    private Inventory itemForTradeRebel1;
+    private Inventory itemForTradeRebel2;
 }

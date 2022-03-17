@@ -13,7 +13,7 @@ import java.util.UUID;
 @RequestMapping("/negociar")
 public class TradeController {
 
-    @PostMapping
+    @PatchMapping
     public ResponseEntity<ResponseTrade> trocar(
             @RequestBody RequestTrade requestTrade
     ) throws Exception {
