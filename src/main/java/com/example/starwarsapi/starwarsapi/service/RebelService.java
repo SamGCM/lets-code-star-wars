@@ -1,20 +1,26 @@
 package com.example.starwarsapi.starwarsapi.service;
 
 import com.example.starwarsapi.starwarsapi.StarwarsapiApplication;
+import com.example.starwarsapi.starwarsapi.config.ErrorHandle;
 import com.example.starwarsapi.starwarsapi.dto.RequestRebel;
+import com.example.starwarsapi.starwarsapi.exceptions.NotFoundException;
 import com.example.starwarsapi.starwarsapi.model.Inventory;
 import com.example.starwarsapi.starwarsapi.model.Location;
 import com.example.starwarsapi.starwarsapi.model.Rebel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class RebelService {
 
     Random random = new Random();
+    ErrorHandle errorHandler = new ErrorHandle();
 
     public Rebel registerRebel(RequestRebel requestRebel) {
         InventoryService inventoryService = new InventoryService();
@@ -39,19 +45,29 @@ public class RebelService {
         return StarwarsapiApplication.listRebels.searchRebels();
     }
 
+    public Rebel findRebel(UUID id) throws NotFoundException {
+        Optional<Rebel> result = StarwarsapiApplication.listRebels.detailsRebel(id);
+        if(result.isPresent()) {
+            return result.get();
+        } else {
+            log.error("Rebelde nao foi encontrado"+ id);
+            throw new NotFoundException("Rebelde nao encontrado");
+        }
+    }
+
     public Location reportLocation(UUID id) throws Exception {
-        Rebel rebel = StarwarsapiApplication.listRebels.detailsRebel(id);
-        String galaxy = rebel.getLocation().getGalaxy();
-        rebel.setLocation(new Location(galaxy));
-        return rebel.getLocation();
+        Optional<Rebel> rebel = StarwarsapiApplication.listRebels.detailsRebel(id);
+        String galaxy = rebel.get().getLocation().getGalaxy();
+        rebel.get().setLocation(new Location(galaxy));
+        return rebel.get().getLocation();
     }
 
     public Rebel reportRebel(UUID id) throws Exception {
-        Rebel rebel = StarwarsapiApplication.listRebels.detailsRebel(id);
-        int actualCount = rebel.getReportCount();
-        rebel.setReportCount(actualCount + 1);
+        Optional<Rebel> rebel = StarwarsapiApplication.listRebels.detailsRebel(id);
+        int actualCount = rebel.get().getReportCount();
+        rebel.get().setReportCount(actualCount + 1);
 
-        return rebel;
+        return rebel.get();
     }
 
 }
