@@ -50,7 +50,7 @@ public class DataService {
 
             writer.flush();
 
-            String filename = "C:\\Users\\Samue\\IdeaProjects\\lets-code-star-wars\\relatorio.csv";
+            String filename = ".\\relatorio.csv";
 
             File file = new File(filename);
             InputStreamResource resource =  new InputStreamResource(new FileInputStream(file));

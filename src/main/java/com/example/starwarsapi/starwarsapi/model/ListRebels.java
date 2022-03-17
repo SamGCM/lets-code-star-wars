@@ -1,6 +1,7 @@
 package com.example.starwarsapi.starwarsapi.model;
 
 import com.example.starwarsapi.starwarsapi.dto.RequestRebel;
+import com.example.starwarsapi.starwarsapi.exceptions.NotFoundException;
 
 import java.util.*;
 
@@ -15,21 +16,7 @@ public class ListRebels {
         return ListRebels.rebels;
     }
 
-    public Rebel detailsRebel(UUID id) throws Exception {
-        Optional<Rebel> resultRebel =
-                ListRebels.rebels.stream().filter(rebel -> Objects.equals(rebel.getId(),id)).findAny();
-        if(resultRebel.isPresent()){
-            return resultRebel.get();
-        } else {
-            throw new Exception("Rebelde não encontrado.");
-        }
+    public Optional<Rebel> detailsRebel(UUID id) {
+        return ListRebels.rebels.stream().filter(rebel -> Objects.equals(rebel.getId(),id)).findAny();
     }
-
-//    public Rebel updateRebel(UUID id, RequestRebel requestRebel) throws Exception {
-//        ListRebels.rebels.stream().filter(rebel -> Objects.equals(rebel.getId(),id))
-//                .forEach(rebel -> {
-//                    rebel.setInventory(requestRebel.);
-//                });
-//        return detailsRebel(id);
-//    }
 }

@@ -4,6 +4,7 @@ import com.example.starwarsapi.starwarsapi.dto.RequestRebel;
 import com.example.starwarsapi.starwarsapi.dto.ResponseLocation;
 import com.example.starwarsapi.starwarsapi.dto.ResponseRebel;
 import com.example.starwarsapi.starwarsapi.dto.ResponseReportRebel;
+import com.example.starwarsapi.starwarsapi.exceptions.NotFoundException;
 import com.example.starwarsapi.starwarsapi.model.Rebel;
 import com.example.starwarsapi.starwarsapi.service.DataService;
 import com.example.starwarsapi.starwarsapi.service.RebelService;
@@ -31,6 +32,11 @@ public class RebelController {
     @GetMapping
     public List<ResponseRebel> rebels(){
         return ResponseRebel.toResponse(rebelService.getAllRebels());
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<ResponseRebel> rebelsDetails(@PathVariable UUID id) throws NotFoundException {
+        return ResponseEntity.ok(new ResponseRebel(rebelService.findRebel(id)));
     }
 
 
