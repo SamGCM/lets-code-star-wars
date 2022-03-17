@@ -17,8 +17,8 @@ public class RequestTrade {
     Random random = new Random();
 
     public RequestTrade (UUID traderId1, UUID traderId2, Inventory traderItens1, Inventory traderItens2) {
-        this.rebelTrader1 = UUID.randomUUID();
-        this.rebelTrader2 = traderId1;
+        this.rebelTrader1 = traderId1;
+        this.rebelTrader2 = traderId2;
         this.itemForTradeRebel1 = traderItens1;
         this.itemForTradeRebel2 = traderItens2;
     }
