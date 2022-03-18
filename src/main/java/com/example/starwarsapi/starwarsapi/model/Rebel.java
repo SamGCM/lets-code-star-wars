@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Setter @Getter @AllArgsConstructor
@@ -14,5 +15,5 @@ public class Rebel {
     private String genre;
     private Location location;
     private Inventory inventory;
-    private int reportCount;
+    private List<UUID> voteForTraitor;
 }

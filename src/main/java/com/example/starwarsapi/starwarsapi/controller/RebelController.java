@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -54,9 +55,10 @@ public class RebelController {
         return ResponseEntity.ok(new ResponseLocation(rebelService.reportLocation(id)));
     }
 
-    @PostMapping("reportar/{id}")
-    public ResponseEntity<ResponseReportRebel> reportRebel(@PathVariable UUID id) throws Exception {
-        return ResponseEntity.ok(new ResponseReportRebel(rebelService.reportRebel(id)));
+    @PatchMapping("/reportar-traidor/{id}")
+    public ResponseEntity<ResponseRebel> reportTraitor(@PathVariable UUID id, @RequestBody Map<String,String> whoReportId) throws Exception {
+        UUID whoReportUUID = UUID.fromString(whoReportId.get("whoReportId"));
+        return ResponseEntity.ok( new ResponseRebel(rebelService.voteTraitor(id, whoReportUUID)));
     }
 
     @GetMapping("relatorio")
@@ -64,4 +66,5 @@ public class RebelController {
         DataService dataService = new DataService();
         return dataService.generateFile();
     }
+
 }

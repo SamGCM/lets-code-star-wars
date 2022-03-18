@@ -10,6 +10,7 @@ import com.example.starwarsapi.starwarsapi.model.Rebel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -19,10 +20,13 @@ import java.util.UUID;
 @Slf4j
 public class RebelService {
 
+    Random random = new Random();
+
     public Rebel registerRebel(RequestRebel requestRebel) {
         InventoryService inventoryService = new InventoryService();
         Inventory inventory = inventoryService.createInventory();
         Location location = new Location(requestRebel.getGalaxy());
+        List<UUID> voteForTraitor = new ArrayList<>();
 
         Rebel rebel = new Rebel(
                 UUID.randomUUID(),
@@ -31,7 +35,7 @@ public class RebelService {
                 requestRebel.getGenre(),
                 location,
                 inventory,
-                0
+                voteForTraitor
         );
 
         StarwarsapiApplication.listRebels.addRebel(rebel);
@@ -60,6 +64,17 @@ public class RebelService {
         rebel.get().setReportCount(actualCount + 1);
 
         return rebel.get();
+    }
+
+    public Rebel voteTraitor(UUID traitorId, UUID whoReportId) throws Exception {
+        Rebel rebelTraitor = getRebel(traitorId);
+        rebelTraitor.getVoteForTraitor().add(whoReportId);
+        return rebelTraitor;
+    }
+
+    public Boolean isTraitor(UUID id) throws Exception {
+        Rebel rebel = getRebel(id);
+        return rebel.getVoteForTraitor().size() >= 3;
     }
 
 }
