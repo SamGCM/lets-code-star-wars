@@ -7,10 +7,6 @@
 - [Rafael](https://github.com/hyansu)
 - [Samuel Gama ](https://github.com/SamGCM)
 
-## 💻📱 Preview
-<a href="netflix-squad6.netlify.app">Acesse</a>
-
-
 ## 🔨 Ferramentas Utilizadas
 - [Java](https://angular.io/)
 - [Springboot](https://ng-bootstrap.github.io/#/home)
