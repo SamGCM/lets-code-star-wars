@@ -1,7 +1,10 @@
 package com.example.starwarsapi.starwarsapi.model;
 
-import java.util.*;
+import com.example.starwarsapi.starwarsapi.exceptions.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.*;
+@Slf4j
 public class ListRebels {
     private static List<Rebel> rebels = new ArrayList<>();
 
@@ -13,23 +16,13 @@ public class ListRebels {
         return ListRebels.rebels;
     }
 
-    public Rebel detailsRebel(UUID id) throws Exception {
-        Optional<Rebel> resultRebel =
-                ListRebels.rebels.stream().filter(rebel -> Objects.equals(rebel.getId(),id)).findAny();
-        if(resultRebel.isPresent()){
-            return resultRebel.get();
+    public Optional<Rebel> detailsRebel(UUID id) throws NotFoundException {
+        Optional<Rebel> result = ListRebels.rebels.stream().filter(rebel -> Objects.equals(rebel.getId(),id)).findAny();
+        if(result.isPresent()) {
+            return result;
         } else {
-            throw new Exception("Rebelde não encontrado.");
+            log.error("Rebelde nao foi encontrado "+ id);
+            throw new NotFoundException("Rebelde nao encontrado " + id);
         }
     }
-
-//    public Rebel atualizaCliente(UUID id, RequestCliente requestCliente) throws Exception {
-//        ListRebels.rebels.stream().filter(cliente -> Objects.equals(cliente.getId(),id))
-//                .forEach(cliente -> {
-//                    cliente.setNome(requestCliente.getNome());
-//                    cliente.setEmail(requestCliente.getEmail());
-//                    cliente.setSenha(requestCliente.getSenha());
-//                });
-//        return detalhesCliente(id);
-//    }
 }
