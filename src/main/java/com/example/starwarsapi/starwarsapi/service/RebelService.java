@@ -19,9 +19,6 @@ import java.util.UUID;
 @Slf4j
 public class RebelService {
 
-    Random random = new Random();
-    ErrorHandle errorHandler = new ErrorHandle();
-
     public Rebel registerRebel(RequestRebel requestRebel) {
         InventoryService inventoryService = new InventoryService();
         Inventory inventory = inventoryService.createInventory();
@@ -47,22 +44,17 @@ public class RebelService {
 
     public Rebel findRebel(UUID id) throws NotFoundException {
         Optional<Rebel> result = StarwarsapiApplication.listRebels.detailsRebel(id);
-        if(result.isPresent()) {
-            return result.get();
-        } else {
-            log.error("Rebelde nao foi encontrado"+ id);
-            throw new NotFoundException("Rebelde nao encontrado");
-        }
+        return result.get();
     }
 
-    public Location reportLocation(UUID id) throws Exception {
+    public Location reportLocation(UUID id) throws NotFoundException {
         Optional<Rebel> rebel = StarwarsapiApplication.listRebels.detailsRebel(id);
         String galaxy = rebel.get().getLocation().getGalaxy();
         rebel.get().setLocation(new Location(galaxy));
         return rebel.get().getLocation();
     }
 
-    public Rebel reportRebel(UUID id) throws Exception {
+    public Rebel reportRebel(UUID id) throws NotFoundException {
         Optional<Rebel> rebel = StarwarsapiApplication.listRebels.detailsRebel(id);
         int actualCount = rebel.get().getReportCount();
         rebel.get().setReportCount(actualCount + 1);

@@ -39,7 +39,8 @@ public class InventoryService {
 
         if(verifyIsTraitor(Trader1.get(), Trader2.get())) {
             log.error("Um dos rebeldes é um traidor! Não pode negociar.");
-            throw new NotFoundException("Um dos rebeldes é um traidor! Não pode negociar.");
+            NotFoundException notFoundException = new NotFoundException("Um dos rebeldes é um traidor! Não pode negociar.");
+            errorHandler.handlerNotFound(notFoundException);
         }
 
         if(verifyBalance(itensForTrade1, itensForTrade2) && verifyHaveAllItems(Trader1.get(), itensForTrade1) && verifyHaveAllItems(Trader2.get(), itensForTrade2)){
@@ -54,7 +55,6 @@ public class InventoryService {
             log.error("Um dos rebels não tem itens suficientes para negociar.");
             NotFoundException notFoundException = new NotFoundException("Um dos rebels não tem itens suficientes para negociar.");
             errorHandler.handlerNotFound(notFoundException);
-            throw notFoundException;
         }
         log.info("Negociação realizada com sucesso");
         return "Negociação realizada com sucesso";
