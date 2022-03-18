@@ -18,7 +18,7 @@ import java.util.UUID;
 public class InventoryService {
     Random random = new Random();
     ErrorHandle errorHandler = new ErrorHandle();
-
+    RebelService rebelService = new RebelService();
 
 //    GERA UM INVENTÁRIO COM NÚMERO ALEATÓRIOS DE ITENS, DE 0 A 10
     public Inventory createInventory (){
@@ -31,7 +31,7 @@ public class InventoryService {
         return inventory;
     }
 
-    public String tradeItems(RequestTrade requestTrade) throws NotFoundException {
+    public RequestTrade tradeItems(RequestTrade requestTrade) throws NotFoundException {
         Optional<Rebel> Trader1 =  StarwarsapiApplication.listRebels.detailsRebel(requestTrade.getRebelTrader1());
         Optional<Rebel> Trader2 = StarwarsapiApplication.listRebels.detailsRebel(requestTrade.getRebelTrader2());
         Inventory itensForTrade1 = requestTrade.getItemForTradeRebel1();
@@ -41,6 +41,7 @@ public class InventoryService {
             log.error("Um dos rebeldes é um traidor! Não pode negociar.");
             NotFoundException notFoundException = new NotFoundException("Um dos rebeldes é um traidor! Não pode negociar.");
             errorHandler.handlerNotFound(notFoundException);
+            throw notFoundException;
         }
 
         if(verifyBalance(itensForTrade1, itensForTrade2) && verifyHaveAllItems(Trader1.get(), itensForTrade1) && verifyHaveAllItems(Trader2.get(), itensForTrade2)){
@@ -51,20 +52,22 @@ public class InventoryService {
             Trader1.get().setInventory(includeItemsNewInventory(Trader1.get().getInventory(), itensForTrade2));
             Trader2.get().setInventory(includeItemsNewInventory(Trader2.get().getInventory(), itensForTrade1));
 
+            log.info("Negociação realizada com sucesso");
+            return requestTrade;
         } else {
             log.error("Um dos rebels não tem itens suficientes para negociar.");
             NotFoundException notFoundException = new NotFoundException("Um dos rebels não tem itens suficientes para negociar.");
             errorHandler.handlerNotFound(notFoundException);
+            throw notFoundException;
         }
-        log.info("Negociação realizada com sucesso");
-        return "Negociação realizada com sucesso";
+
     }
 
-    private boolean verifyIsTraitor(Rebel trader1, Rebel trader2 ){
-        if(trader1.getReportCount() >= 3){
+    private boolean verifyIsTraitor(Rebel trader1, Rebel trader2 ) throws NotFoundException {
+        if(rebelService.isTraitor(trader1.getId())){
             return true;
         }
-        else if(trader2.getReportCount() >= 3){
+        else if(rebelService.isTraitor(trader2.getId())){
             return true;
         } else {
             return false;

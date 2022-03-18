@@ -3,6 +3,7 @@ package com.example.starwarsapi.starwarsapi.controller;
 import com.example.starwarsapi.starwarsapi.StarwarsapiApplication;
 import com.example.starwarsapi.starwarsapi.dto.RequestTrade;
 import com.example.starwarsapi.starwarsapi.dto.ResponseTrade;
+import com.example.starwarsapi.starwarsapi.exceptions.NotFoundException;
 import com.example.starwarsapi.starwarsapi.service.InventoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,9 @@ public class TradeController {
     @PatchMapping
     public ResponseEntity<ResponseTrade> trocar(
             @RequestBody RequestTrade requestTrade
-    ) throws Exception {
+    ) throws NotFoundException {
         InventoryService service = new InventoryService();
-        service.tradeItems(requestTrade);
-        return ResponseEntity.ok(new ResponseTrade(requestTrade));
+
+        return ResponseEntity.ok(new ResponseTrade(service.tradeItems(requestTrade)));
     }
 }

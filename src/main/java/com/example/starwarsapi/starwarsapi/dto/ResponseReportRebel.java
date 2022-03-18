@@ -15,13 +15,13 @@ public class ResponseReportRebel {
     private UUID id;
     private String name;
     private String genre;
-    private int reportCount;
+    private List<UUID> voteForTraitor;
 
     public ResponseReportRebel(Rebel rebel){
         this.id = rebel.getId();
         this.name = rebel.getName();
         this.genre = rebel.getGenre();
-        this.reportCount = rebel.getReportCount();
+        this.voteForTraitor = rebel.getVoteForTraitor();
     }
 
     public static List<ResponseReportRebel> toResponse(List<Rebel> rebel){

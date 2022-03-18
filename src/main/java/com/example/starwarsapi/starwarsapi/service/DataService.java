@@ -1,6 +1,7 @@
 package com.example.starwarsapi.starwarsapi.service;
 
 import com.example.starwarsapi.starwarsapi.StarwarsapiApplication;
+import com.example.starwarsapi.starwarsapi.exceptions.NotFoundException;
 import com.example.starwarsapi.starwarsapi.model.Inventory;
 import com.example.starwarsapi.starwarsapi.model.Rebel;
 import com.opencsv.CSVWriter;
@@ -26,8 +27,9 @@ public class DataService {
 
     List<String[]> datas = new ArrayList<>();
     List<Rebel> list = StarwarsapiApplication.listRebels.searchRebels();
+    RebelService rebelService = new RebelService();
 
-    public ResponseEntity<Object> generateFile() throws IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
+    public ResponseEntity<Object> generateFile() throws IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, NotFoundException {
 
         Inventory resourceAverage = resourceAverage();
         Writer writer = null;
@@ -77,13 +79,13 @@ public class DataService {
         }
     }
 
-    private float getPercentageTraitor(){
+    private float getPercentageTraitor() throws NotFoundException {
         float percentage = 0;
         int traitorsCount = 0;
         int total = list.size();
 
         for (Rebel rebel : list ) {
-            if(rebel.getReportCount() >= 3){
+            if(rebelService.isTraitor(rebel.getId())){
                 traitorsCount++;
             }
         }
@@ -94,18 +96,18 @@ public class DataService {
         return  percentage;
     }
 
-    private int lostPoints(){
+    private int lostPoints() throws NotFoundException {
         int points = 0;
 
         for (Rebel rebel : list ) {
-            if (rebel.getReportCount() >= 3){
+            if (rebelService.isTraitor(rebel.getId())){
                 points = points + Inventory.getTotal(rebel.getInventory());
             }
         }
         return points;
     }
 
-    private Inventory resourceAverage(){
+    private Inventory resourceAverage() throws NotFoundException {
         int traitorsCount = 0;
         int weapon = 0;
         int water = 0;
@@ -113,12 +115,12 @@ public class DataService {
         int food = 0;
 
         for (Rebel rebel : list ) {
-            if(rebel.getReportCount() < 3){
+            if(!rebelService.isTraitor(rebel.getId())){
                 weapon = weapon + rebel.getInventory().getWeapon();
                 water = water + rebel.getInventory().getWater();
                 ammo = ammo + rebel.getInventory().getAmmo();
                 food = food + rebel.getInventory().getFood();
-            } else if (rebel.getReportCount() >= 3){
+            } else if (rebelService.isTraitor(rebel.getId())){
                 traitorsCount++;
             }
         }
