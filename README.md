@@ -1,6 +1,4 @@
-# Documentação: https://documenter.getpostman.com/view/19890147/UVsPNPb5
-
-Projeto final do módulo de Angular da Lets Code.
+# Documentação da API: https://documenter.getpostman.com/view/19890147/UVsPNPb5
 
 # Equipe
 
